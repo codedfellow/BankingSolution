@@ -32,6 +32,7 @@ namespace Infrastructure
         private static IServiceCollection AddServices(this IServiceCollection services)
         {
             services.AddScoped<IJwtTokenProvider, JwtTokenProvider>();
+            services.AddScoped<IPasswordProvider, PasswordProvider>();
             return services;
         }
     }

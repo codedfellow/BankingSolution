@@ -1,7 +1,9 @@
 ﻿using Application.Auth.Commands;
 using Application.DTOs.Auth;
+using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace API.Controllers
 {
@@ -9,17 +11,21 @@ namespace API.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        public AuthController()
+        private readonly IMediator _mediator;
+        public AuthController(IMediator mediator)
         {
-            
+            _mediator = mediator;
         }
 
         [HttpPost]
         [Route("register")]
+        [Produces("application/json")]
+        [ProducesResponseType(typeof(RegisterUserResponse), StatusCodes.Status200OK)]
         public async Task<IActionResult> RegisterUserAsync([FromBody]RegisterUserDto model)
         {
-            //var command = new RegisterUserCommand()
-            return Ok();
+            var command = new RegisterUserCommand(model.FirstName, model.MiddleName, model.LastName, model.Email, model.Password);
+            var result = await _mediator.Send(command);
+            return Ok(result);
         }
     }
 }
