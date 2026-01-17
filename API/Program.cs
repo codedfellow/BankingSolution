@@ -1,3 +1,7 @@
+using API;
+using Application;
+using Infrastructure;
+using Infrastructure.Data;
 using Microsoft.OpenApi;
 
 public partial class Program
@@ -7,40 +11,15 @@ public partial class Program
         var builder = WebApplication.CreateBuilder(args);
 
         // Add services to the container.
-        builder.Services.AddControllers();
-
-        // Swagger / OpenAPI (Swashbuckle)
-        builder.Services.AddEndpointsApiExplorer();
-        builder.Services.AddSwaggerGen(c =>
-        {
-            c.SwaggerDoc("v1", new OpenApiInfo
-            {
-                Title = "Banking Solution API",
-                Version = "v1",
-                Description = "Banking Solution API"
-            });
-
-            // Define the Bearer security scheme
-            c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-            {
-                Type = SecuritySchemeType.Http,
-                Scheme = "bearer",
-                BearerFormat = "JWT",
-                Description = "Enter your JWT token in the format: Bearer {token}"
-            });
-
-            // Reference the scheme correctly (THIS was the issue)
-            c.AddSecurityRequirement((requirement) => new OpenApiSecurityRequirement
-            {
-                {
-                    new OpenApiSecuritySchemeReference("Bearer"),
-                    new List<string>()
-                }
-            });
-        });
-
+        builder.Services.AddApi(builder.Configuration).AddInfrastructure(builder.Configuration).AddApplication();
 
         var app = builder.Build();
+
+        using (var scope = app.Services.CreateScope())
+        {
+            var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+            DatabaseMigrationsProvider.RunMigrations(db);
+        }
 
         // Configure the HTTP request pipeline.
         if (app.Environment.IsDevelopment())

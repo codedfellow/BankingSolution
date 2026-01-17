@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Application.Auth.Commands;
+using Application.DTOs.Auth;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
@@ -7,5 +9,17 @@ namespace API.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
+        public AuthController()
+        {
+            
+        }
+
+        [HttpPost]
+        [Route("register")]
+        public async Task<IActionResult> RegisterUserAsync([FromBody]RegisterUserDto model)
+        {
+            //var command = new RegisterUserCommand()
+            return Ok();
+        }
     }
 }
