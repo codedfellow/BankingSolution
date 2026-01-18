@@ -4,5 +4,5 @@ using System.Text;
 
 namespace Application.DTOs.Account
 {
-    public record UpdateAddressDto(string? AccountNumber, string? Address);
+    public sealed record UpdateAccountResponse(string Message);
 }

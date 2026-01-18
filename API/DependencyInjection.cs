@@ -29,7 +29,7 @@ namespace API
                     Scheme = "bearer",
                     In = ParameterLocation.Header,
                     BearerFormat = "JWT",
-                    Description = "Enter your JWT token in the format: Bearer {token}"
+                    Description = "Enter your JWT token"
                 });
 
                 options.AddSecurityRequirement(document => new OpenApiSecurityRequirement

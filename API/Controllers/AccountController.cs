@@ -1,4 +1,5 @@
 ﻿using Application.Account;
+using Application.Account.Commands;
 using Application.Auth.Commands;
 using Application.DTOs.Account;
 using Application.DTOs.Auth;
@@ -34,6 +35,17 @@ namespace API.Controllers
         public async Task<IActionResult> OpenAccount([FromBody]OpenAccountDto model)
         {
             var command = new OpenAccountCommand(model.UserId, model.Address);
+            var result = await _mediator.Send(command);
+            return Ok(result);
+        }
+
+        [HttpPut]
+        [Route("update-account")]
+        [Produces("application/json")]
+        [ProducesResponseType(typeof(UpdateAccountResponse), StatusCodes.Status200OK)]
+        public async Task<IActionResult> UpdatedAccount([FromBody]UpdateAccountDto model)
+        {
+            var command = new UpdateAccountCommand(model.AccountNumber, model.AccountBalance, model.Address);
             var result = await _mediator.Send(command);
             return Ok(result);
         }
