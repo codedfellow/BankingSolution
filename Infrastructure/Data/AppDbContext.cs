@@ -12,14 +12,14 @@ namespace Infrastructure.Data
     public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(options), IAppDbContext
     {
         public DbSet<User> Users { get; set; }
-        public DbSet<Account> Accounts { get; set; }
+        public DbSet<CustomerAccount> Accounts { get; set; }
         public DbSet<Transaction> Transactions { get; set; }
         private IDbContextTransaction? _currentTransaction;
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
 
-            modelBuilder.Entity<Account>()
+            modelBuilder.Entity<CustomerAccount>()
                 .HasIndex(e => e.AccountNumber)
                 .IsUnique();
 
@@ -27,13 +27,13 @@ namespace Infrastructure.Data
                 .HasIndex(e => e.Email)
                 .IsUnique();
 
-            modelBuilder.Entity<Account>()
+            modelBuilder.Entity<CustomerAccount>()
                 .Property(a => a.AccountBalance)
-                .HasPrecision(18, 4);
+                .HasPrecision(18, 2);
 
             modelBuilder.Entity<Transaction>()
                 .Property(t => t.Amount)
-                .HasPrecision(18, 4);
+                .HasPrecision(18, 2);
 
             modelBuilder.Entity<Transaction>(entity =>
             {
@@ -48,7 +48,7 @@ namespace Infrastructure.Data
                       .OnDelete(DeleteBehavior.Restrict);
             });
 
-            modelBuilder.Entity<Account>(entity =>
+            modelBuilder.Entity<CustomerAccount>(entity =>
             {
                 entity.HasOne(a => a.UserRef)
                       .WithMany()

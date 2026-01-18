@@ -1,5 +1,5 @@
-﻿using API.Filters;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
 using System.Text;
@@ -12,9 +12,9 @@ namespace API
         {
             services.AddControllers();
             services.AddEndpointsApiExplorer();
-            services.AddSwaggerGen(c =>
+            services.AddSwaggerGen(options =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo
+                options.SwaggerDoc("v1", new OpenApiInfo
                 {
                     Title = "Banking Solution API",
                     Version = "v1",
@@ -22,26 +22,20 @@ namespace API
                 });
 
                 // Define the Bearer security scheme
-                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                options.AddSecurityDefinition("bearer", new OpenApiSecurityScheme
                 {
-                    Type = SecuritySchemeType.ApiKey,
+                    Type = SecuritySchemeType.Http,
                     Name = "Authorization",
-                    Scheme = JwtBearerDefaults.AuthenticationScheme,
+                    Scheme = "bearer",
                     In = ParameterLocation.Header,
                     BearerFormat = "JWT",
                     Description = "Enter your JWT token in the format: Bearer {token}"
                 });
 
-                c.AddSecurityRequirement((requirement) => new OpenApiSecurityRequirement
+                options.AddSecurityRequirement(document => new OpenApiSecurityRequirement
                 {
-                    {
-                        new OpenApiSecuritySchemeReference("Bearer"),
-                        new List<string>()
-                    }
+                    [new OpenApiSecuritySchemeReference("bearer", document)] = []
                 });
-
-                // 🔴 THIS IS THE IMPORTANT LINE
-                //c.OperationFilter<AuthorizeOperationFilter>();
             });
 
             string secret = configuration["Jwt:Secret"]!;
@@ -80,7 +74,7 @@ namespace API
             });
 
             services.AddAuthorization();
-            services.AddOpenApi();
+            //services.AddOpenApi();
 
             return services;
         }

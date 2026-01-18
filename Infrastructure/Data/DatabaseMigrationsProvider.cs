@@ -12,16 +12,16 @@ namespace Infrastructure.Data
         {
             var canConnect = false;
             //int connectCount = 0;
-            do
-            {
-                canConnect = CheckDBConnection(context);
+            //do
+            //{
+                //canConnect = CheckDBConnection(context);
                 //connectCount++;
 
                 //if (connectCount == 3)
                 //{
                 //    throw new DatabaseConnectionException("Database connection failed. Kindly confirm the connection string");
                 //}
-            } while (canConnect == false);
+            //} while (canConnect == false);
 
             var pendingMigrations = context.Database.GetPendingMigrations();
             if (pendingMigrations.Any())

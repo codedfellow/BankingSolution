@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Domain.Entitites
 {
-    public class Account : BaseEntity
+    public class CustomerAccount : BaseEntity
     {
         [Key]
         public Guid Id { get; set; }
