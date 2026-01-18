@@ -37,14 +37,14 @@ namespace Infrastructure.Data
 
             modelBuilder.Entity<Transaction>(entity =>
             {
-                entity.HasOne(t => t.SenderRef)
+                entity.HasOne(t => t.DebitAccountRef)
                       .WithMany()
-                      .HasForeignKey(t => t.SenderId)
+                      .HasForeignKey(t => t.DebitAccountId)
                       .OnDelete(DeleteBehavior.Restrict);
 
-                entity.HasOne(t => t.ReceiverRef)
+                entity.HasOne(t => t.CreditAccountRef)
                       .WithMany()
-                      .HasForeignKey(t => t.ReceiverId)
+                      .HasForeignKey(t => t.CreditAccountId)
                       .OnDelete(DeleteBehavior.Restrict);
             });
 
