@@ -1,5 +1,6 @@
 ﻿using Application.Account;
 using Application.Account.Commands;
+using Application.Account.Queries;
 using Application.Auth.Commands;
 using Application.DTOs.Account;
 using Application.DTOs.Auth;
@@ -25,7 +26,9 @@ namespace API.Controllers
         [Route("balance")]
         public async Task<IActionResult> AccountBalance([FromQuery]string? accountNumber)
         {
-            return Ok("This works");
+            var query = new AccountBalanceQuery(accountNumber ?? string.Empty);
+            var result = await _mediator.Send(query);
+            return Ok(result);
         }
 
         [HttpPost]

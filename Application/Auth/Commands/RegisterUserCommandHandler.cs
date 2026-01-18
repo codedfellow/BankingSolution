@@ -53,7 +53,7 @@ namespace Application.Auth.Commands
             var user = new User
             {
                 FirstName = request.FirstName,
-                MiddleName = request.LastName,
+                MiddleName = request.MiddleName,
                 LastName = request.LastName,
                 Email = email,
                 PasswordHash = _passwordProvider.CustomHashPassword(request.Password),
