@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
+using Microsoft.OpenApi.Models;
 using System.Text;
 
 namespace API
@@ -12,30 +13,38 @@ namespace API
         {
             services.AddControllers();
             services.AddEndpointsApiExplorer();
-            services.AddSwaggerGen(options =>
+            services.AddSwaggerGen(o =>
             {
-                options.SwaggerDoc("v1", new OpenApiInfo
-                {
-                    Title = "Banking Solution API",
-                    Version = "v1",
-                    Description = "Banking Solution API"
-                });
+                o.CustomSchemaIds(id => id.FullName!.Replace('+', '-'));
 
-                // Define the Bearer security scheme
-                options.AddSecurityDefinition("bearer", new OpenApiSecurityScheme
+                var securityScheme = new OpenApiSecurityScheme
                 {
-                    Type = SecuritySchemeType.Http,
-                    Name = "Authorization",
-                    Scheme = "bearer",
+                    Name = "JWT Authentication",
+                    Description = "Enter your JWT token in this field",
                     In = ParameterLocation.Header,
-                    BearerFormat = "JWT",
-                    Description = "Enter your JWT token"
-                });
+                    Type = SecuritySchemeType.Http,
+                    Scheme = JwtBearerDefaults.AuthenticationScheme,
+                    BearerFormat = "JWT"
+                };
 
-                options.AddSecurityRequirement(document => new OpenApiSecurityRequirement
+                o.AddSecurityDefinition(JwtBearerDefaults.AuthenticationScheme, securityScheme);
+
+                var securityRequirement = new OpenApiSecurityRequirement
+            {
                 {
-                    [new OpenApiSecuritySchemeReference("bearer", document)] = []
-                });
+                    new OpenApiSecurityScheme
+                    {
+                        Reference = new OpenApiReference
+                        {
+                            Type = ReferenceType.SecurityScheme,
+                            Id = JwtBearerDefaults.AuthenticationScheme
+                        }
+                    },
+                    []
+                }
+            };
+
+                o.AddSecurityRequirement(securityRequirement);
             });
 
             string secret = configuration["Jwt:Secret"]!;
@@ -74,7 +83,7 @@ namespace API
             });
 
             services.AddAuthorization();
-            //services.AddOpenApi();
+            services.AddOpenApi();
 
             return services;
         }

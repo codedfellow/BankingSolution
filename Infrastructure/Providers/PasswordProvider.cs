@@ -1,5 +1,4 @@
 ﻿using Application.Contracts.Providers;
-using Azure.Core;
 using Domain.Entitites;
 using MediatR;
 using System;

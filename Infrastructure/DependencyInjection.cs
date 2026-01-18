@@ -23,7 +23,8 @@ namespace Infrastructure
             // Add database related services here
             string? connectionString = configuration.GetConnectionString("DefaultConnection");
 
-            services.AddDbContext<AppDbContext>(options => options.UseSqlServer(connectionString));
+            //services.AddDbContext<AppDbContext>(options => options.UseSqlServer(connectionString));
+            services.AddDbContext<AppDbContext>(options => options.UseMySQL(connectionString));
             services.AddScoped<IAppDbContext>(sp => sp.GetRequiredService<AppDbContext>());
 
             return services;
