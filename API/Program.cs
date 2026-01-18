@@ -1,7 +1,10 @@
 using API;
+using API.Middlewares;
 using Application;
 using Infrastructure;
 using Infrastructure.Data;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi;
 
 public partial class Program
@@ -21,9 +24,11 @@ public partial class Program
             DatabaseMigrationsProvider.RunMigrations(db);
         }
 
+        app.UseMiddleware<ExceptionMiddleware>();
         // Configure the HTTP request pipeline.
         if (app.Environment.IsDevelopment())
         {
+            app.MapOpenApi();
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
@@ -33,7 +38,7 @@ public partial class Program
         }
 
         app.UseHttpsRedirection();
-
+        app.UseAuthentication();
         app.UseAuthorization();
 
         app.MapControllers();

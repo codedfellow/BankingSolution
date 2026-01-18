@@ -27,5 +27,16 @@ namespace API.Controllers
             var result = await _mediator.Send(command);
             return Ok(result);
         }
+
+        [HttpPost]
+        [Route("login")]
+        [Produces("application/json")]
+        [ProducesResponseType(typeof(LoginResponse), StatusCodes.Status200OK)]
+        public async Task<IActionResult> LoginAsync([FromBody] LoginDto model)
+        {
+            var command = new LoginCommand(model.Email, model.Password);
+            var result = await _mediator.Send(command);
+            return Ok(result);
+        }
     }
 }

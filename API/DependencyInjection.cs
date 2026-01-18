@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using API.Filters;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
 using System.Text;
@@ -23,8 +24,10 @@ namespace API
                 // Define the Bearer security scheme
                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
-                    Type = SecuritySchemeType.Http,
-                    Scheme = "bearer",
+                    Type = SecuritySchemeType.ApiKey,
+                    Name = "Authorization",
+                    Scheme = JwtBearerDefaults.AuthenticationScheme,
+                    In = ParameterLocation.Header,
                     BearerFormat = "JWT",
                     Description = "Enter your JWT token in the format: Bearer {token}"
                 });
@@ -36,6 +39,9 @@ namespace API
                         new List<string>()
                     }
                 });
+
+                // 🔴 THIS IS THE IMPORTANT LINE
+                //c.OperationFilter<AuthorizeOperationFilter>();
             });
 
             string secret = configuration["Jwt:Secret"]!;
@@ -74,6 +80,7 @@ namespace API
             });
 
             services.AddAuthorization();
+            services.AddOpenApi();
 
             return services;
         }

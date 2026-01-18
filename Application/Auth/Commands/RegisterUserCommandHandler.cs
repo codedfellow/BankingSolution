@@ -47,7 +47,7 @@ namespace Application.Auth.Commands
 
             if (userExists)
             {
-                throw new Exception("User with this email already exists.");
+                throw new CustomValidationException("User with this email already exists.");
             }
 
             var user = new User
