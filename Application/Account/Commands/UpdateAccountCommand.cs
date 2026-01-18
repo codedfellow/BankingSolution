@@ -6,5 +6,5 @@ using System.Text;
 
 namespace Application.Account.Commands
 {
-    public sealed record UpdateAccountCommand(string? AccountNumber, decimal AccountBalance, string? Address) : IRequest<UpdateAccountResponse>;
+    public sealed record UpdateAccountCommand(string? AccountNumber, decimal AccountBalance, string? Address, Guid Userid) : IRequest<UpdateAccountResponse>;
 }

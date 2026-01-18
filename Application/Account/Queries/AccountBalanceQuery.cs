@@ -6,5 +6,5 @@ using System.Text;
 
 namespace Application.Account.Queries
 {
-    public sealed record AccountBalanceQuery(string AccountNumber) : IRequest<AccountBalanceResponse>;
+    public sealed record AccountBalanceQuery(string AccountNumber, Guid UserId) : IRequest<AccountBalanceResponse>;
 }

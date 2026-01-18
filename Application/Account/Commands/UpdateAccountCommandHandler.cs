@@ -30,6 +30,11 @@ namespace Application.Account.Commands
                     throw new CustomValidationException("Account not found");
                 }
 
+                if (account.UserId != request.Userid)
+                {
+                    throw new CustomValidationException("Account does not belong to logged in user");
+                }
+
                 account.Address = request.Address ?? string.Empty;
                 account.AccountBalance = request.AccountBalance;
                 account.UpdatedAtUtc = DateTime.UtcNow;

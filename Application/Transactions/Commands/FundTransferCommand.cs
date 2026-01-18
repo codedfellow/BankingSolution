@@ -7,5 +7,5 @@ using System.Text;
 
 namespace Application.Transactions.Commands
 {
-    public record FundTransferCommand(string? DebitAccountNumber, string? CreditAccountNumber, decimal Amount) : IRequest<FundTransferResponse>;
+    public record FundTransferCommand(string? DebitAccountNumber, string? CreditAccountNumber, decimal Amount, Guid UserId, string? Narration) : IRequest<FundTransferResponse>;
 }

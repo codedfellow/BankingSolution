@@ -4,5 +4,5 @@ using System.Text;
 
 namespace Application.DTOs.Account
 {
-    public record class OpenAccountDto(Guid? UserId, string? Address);
+    public record class OpenAccountDto(string? Address);
 }

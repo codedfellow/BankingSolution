@@ -1,4 +1,5 @@
-﻿using Application.DTOs.Account;
+﻿using Application.DTOs;
+using Application.DTOs.Account;
 using Application.DTOs.Transactions;
 using Application.Transactions.Commands;
 using MediatR;
@@ -14,9 +15,11 @@ namespace API.Controllers
     public class TransactionsController : ControllerBase
     {
         private readonly IMediator _mediator;
-        public TransactionsController(IMediator mediator)
+        private readonly SessionInfo _sessionInfo;
+        public TransactionsController(IMediator mediator, SessionInfo sessionInfo)
         {
-            _mediator = mediator;   
+            _mediator = mediator;
+            _sessionInfo = sessionInfo;
         }
 
         [HttpPost]
@@ -25,7 +28,7 @@ namespace API.Controllers
         [ProducesResponseType(typeof(FundTransferResponse), StatusCodes.Status200OK)]
         public async Task<IActionResult> FundTransfer([FromBody] FundTransferDto model)
         {
-            var command = new FundTransferCommand(model.DebitAccountNumber, model.CreditAccountNumber, model.Amount);
+            var command = new FundTransferCommand(model.DebitAccountNumber, model.CreditAccountNumber, model.Amount, _sessionInfo.UserId, model.Narration);
             var result = await _mediator.Send(command);
             return Ok(result);
         }

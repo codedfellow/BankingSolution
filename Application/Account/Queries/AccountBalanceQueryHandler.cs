@@ -25,6 +25,11 @@ namespace Application.Account.Queries
                 throw new CustomValidationException("Account not found");
             }
 
+            if (account.UserId != request.UserId)
+            {
+                throw new CustomValidationException("Account does not belong to logged in user");
+            }
+
             var result = await (from acc in _context.Accounts
                          join user in _context.Users on acc.UserId equals user.Id
                          where acc.AccountNumber == request.AccountNumber

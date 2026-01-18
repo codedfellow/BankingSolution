@@ -40,6 +40,7 @@ public partial class Program
         app.UseHttpsRedirection();
         app.UseAuthentication();
         app.UseAuthorization();
+        app.UseMiddleware<TokenMiddleware>();
 
         app.MapControllers();
 

@@ -24,14 +24,20 @@ namespace Application.Transactions.Commands
         }
         public async Task<FundTransferResponse> Handle(FundTransferCommand request, CancellationToken cancellationToken)
         {
-            var debitAccount = await _context.Accounts.FirstOrDefaultAsync(x => x.AccountNumber == request.DebitAccountNumber);
+            // Basic existence checks before starting a transaction
+            var debitAccount = await _context.Accounts.FirstOrDefaultAsync(x => x.AccountNumber == request.DebitAccountNumber, cancellationToken);
 
             if (debitAccount is null)
             {
                 throw new CustomValidationException("Specified debit account not found");
             }
 
-            var creditAccount = await _context.Accounts.FirstOrDefaultAsync(x => x.AccountNumber == request.CreditAccountNumber);
+            if (debitAccount.UserId != request.UserId)
+            {
+                throw new CustomValidationException("Debit account does not belong to logged in user");
+            }
+
+            var creditAccount = await _context.Accounts.FirstOrDefaultAsync(x => x.AccountNumber == request.CreditAccountNumber, cancellationToken);
 
             if (creditAccount is null)
             {
@@ -45,10 +51,14 @@ namespace Application.Transactions.Commands
                 throw new CustomValidationException($"Insufficient funds. Kindly fund account with at least {request.Amount - debitAccount.AccountBalance}");
             }
 
+            // Start a DB transaction and re-query the rows with update locks to avoid race conditions
             await _context.BeginTransactionAsync(cancellationToken);
 
             try
             {
+                debitAccount.AccountBalance -= request.Amount;
+                creditAccount.AccountBalance += request.Amount;
+
                 string transactionReference = await GetTransactionReference();
 
                 var transactionObject = new Transaction
@@ -57,6 +67,7 @@ namespace Application.Transactions.Commands
                     CreditAccountId = creditAccount.Id,
                     TransactionRef = transactionReference,
                     Amount = request.Amount,
+                    Narration = request.Narration,
                 };
 
                 await _context.Transactions.AddAsync(transactionObject);

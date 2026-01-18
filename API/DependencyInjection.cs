@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using API.Middlewares;
+using Application.DTOs;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
@@ -84,6 +86,8 @@ namespace API
 
             services.AddAuthorization();
             services.AddOpenApi();
+            services.AddScoped<TokenMiddleware>();
+            services.AddScoped<SessionInfo>();
 
             return services;
         }

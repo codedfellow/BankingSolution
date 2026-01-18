@@ -4,5 +4,5 @@ using System.Text;
 
 namespace Application.DTOs.Transactions
 {
-    public record FundTransferDto(string? DebitAccountNumber, string? CreditAccountNumber, decimal Amount);
+    public record FundTransferDto(string? DebitAccountNumber, string? CreditAccountNumber, decimal Amount, string? Narration);
 }

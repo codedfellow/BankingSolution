@@ -16,6 +16,7 @@ namespace Domain.Entitites
         public decimal Amount { get; set; }
         [MinLength(15), MaxLength(15)]
         public string TransactionRef { get; set; } = string.Empty;
+        public string? Narration { get; set; }
         public CustomerAccount? DebitAccountRef { get; set; }
         public CustomerAccount? CreditAccountRef { get; set; }
     }
