@@ -32,5 +32,27 @@ namespace API.Controllers
             var result = await _mediator.Send(command);
             return Ok(result);
         }
+
+        [HttpPost]
+        [Route("fund-account")]
+        [Produces("application/json")]
+        [ProducesResponseType(typeof(FundTransferResponse), StatusCodes.Status200OK)]
+        public async Task<IActionResult> FundAccount([FromBody] FundAccountDto model)
+        {
+            var command = new FundAccountCommand(model.AccountNumber, model.Amount, _sessionInfo.UserId, model.Narration);
+            var result = await _mediator.Send(command);
+            return Ok(result);
+        }
+
+        [HttpGet]
+        [Route("transaction-history")]
+        [Produces("application/json")]
+        [ProducesResponseType(typeof(List<TransactionHistoryDto>), StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetTransactionHistory()
+        {
+            var query = new Application.Transactions.Queries.TransactionHistoryQuery(_sessionInfo.UserId);
+            var result = await _mediator.Send(query);
+            return Ok(result);
+        }
     }
 }

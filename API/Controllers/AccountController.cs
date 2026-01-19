@@ -51,7 +51,7 @@ namespace API.Controllers
         [ProducesResponseType(typeof(UpdateAccountResponse), StatusCodes.Status200OK)]
         public async Task<IActionResult> UpdatedAccount([FromBody]UpdateAccountDto model)
         {
-            var command = new UpdateAccountCommand(model.AccountNumber, model.AccountBalance, model.Address, _sessionInfo.UserId);
+            var command = new UpdateAccountCommand(model.AccountNumber, model.Address, _sessionInfo.UserId);
             var result = await _mediator.Send(command);
             return Ok(result);
         }

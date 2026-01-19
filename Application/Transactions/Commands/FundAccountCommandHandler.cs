@@ -1,6 +1,4 @@
-﻿using Application.Account.Commands;
-using Application.Contracts.Data;
-using Application.DTOs.Account;
+﻿using Application.Contracts.Data;
 using Application.DTOs.Transactions;
 using Domain.Entitites;
 using MediatR;
@@ -9,65 +7,46 @@ using SharedKernel;
 using SharedKernel.Exceptions;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Application.Transactions.Commands
 {
-    internal class FundTransferCommandHandler : IRequestHandler<FundTransferCommand, FundTransferResponse>
+    internal class FundAccountCommandHandler : IRequestHandler<FundAccountCommand, FundTransferResponse>
     {
         private readonly IAppDbContext _context;
-        private readonly IMediator _mediator;
-        public FundTransferCommandHandler(IAppDbContext context, IMediator mediator)
+        public FundAccountCommandHandler(IAppDbContext context)
         {
             _context = context;
-            _mediator = mediator;
         }
-        public async Task<FundTransferResponse> Handle(FundTransferCommand request, CancellationToken cancellationToken)
+        public async Task<FundTransferResponse> Handle(FundAccountCommand request, CancellationToken cancellationToken)
         {
-            if (request.DebitAccountNumber == request.CreditAccountNumber)
+            // Basic existence checks before starting a transaction
+            var account = await _context.Accounts.FirstOrDefaultAsync(x => x.AccountNumber == request.AccountNumber, cancellationToken);
+
+            if (account is null)
             {
-                throw new CustomValidationException("Debit and credit account numbers cannot be the same");
+                throw new CustomValidationException("Specified account not found");
             }
 
-            var debitAccount = await _context.Accounts.FirstOrDefaultAsync(x => x.AccountNumber == request.DebitAccountNumber, cancellationToken);
-
-            if (debitAccount is null)
+            if (account.UserId != request.UserId)
             {
-                throw new CustomValidationException("Specified debit account not found");
-            }
-
-            if (debitAccount.UserId != request.UserId)
-            {
-                throw new CustomValidationException("Debit account does not belong to logged in user");
-            }
-
-            var creditAccount = await _context.Accounts.FirstOrDefaultAsync(x => x.AccountNumber == request.CreditAccountNumber, cancellationToken);
-
-            if (creditAccount is null)
-            {
-                throw new CustomValidationException("Specified credit account not found");
-            }
-
-            bool canBedebited = debitAccount.AccountBalance >= request.Amount;
-
-            if (!canBedebited)
-            {
-                throw new CustomValidationException($"Insufficient funds. Kindly fund account with at least {request.Amount - debitAccount.AccountBalance}");
+                throw new CustomValidationException("Account does not belong to logged in user");
             }
 
             await _context.BeginTransactionAsync(cancellationToken);
 
             try
             {
-                debitAccount.AccountBalance -= request.Amount;
-                creditAccount.AccountBalance += request.Amount;
+                account.AccountBalance += request.Amount;
 
                 string transactionReference = await GetTransactionReference();
 
                 var transactionObject = new Transaction
                 {
-                    DebitAccountId = debitAccount.Id,
-                    CreditAccountId = creditAccount.Id,
+                    DebitAccountId = account.Id,
+                    CreditAccountId = account.Id,
                     TransactionRef = transactionReference,
                     Amount = request.Amount,
                     Narration = request.Narration,

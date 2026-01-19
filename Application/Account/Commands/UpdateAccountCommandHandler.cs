@@ -36,7 +36,6 @@ namespace Application.Account.Commands
                 }
 
                 account.Address = request.Address ?? string.Empty;
-                account.AccountBalance = request.AccountBalance;
                 account.UpdatedAtUtc = DateTime.UtcNow;
 
                 await _context.SaveChangesAsync();
