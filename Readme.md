@@ -17,7 +17,7 @@ The solution is designed so that business logic remains stable even if external 
 The solution is organized into multiple projects, each with a clear responsibility:
 
 ```
-/src
+/
  ├── Domain
  ├── Application
  ├── Infrastructure
@@ -63,7 +63,7 @@ Before running the application, **you must update the database connection string
 
 1. Navigate to:
    ```
-   src/Api/appsettings.json
+   API/appsettings.json
    ```
 
 2. Update the `ConnectionStrings` section:
