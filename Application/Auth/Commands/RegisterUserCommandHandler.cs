@@ -12,7 +12,7 @@ using System.Text.RegularExpressions;
 
 namespace Application.Auth.Commands
 {
-    internal class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand, RegisterUserResponse>
+    public class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand, RegisterUserResponse>
     {
         private readonly IAppDbContext _context;
         private readonly IJwtTokenProvider _jwtTokenProvider;
@@ -43,7 +43,7 @@ namespace Application.Auth.Commands
                 throw new CustomValidationException("Email is not a valid email address");
             }
 
-            bool userExists = await _context.Users.AnyAsync(u => u.Email.Trim() == request.Email.Trim(), cancellationToken);
+            bool userExists = await _context.Users.AnyAsync(u => u.Email.Trim().ToLower() == request.Email.Trim().ToLower(), cancellationToken);
 
             if (userExists)
             {
@@ -52,10 +52,10 @@ namespace Application.Auth.Commands
 
             var user = new User
             {
-                FirstName = request.FirstName,
+                FirstName = request.FirstName.Trim(),
                 MiddleName = request.MiddleName,
-                LastName = request.LastName,
-                Email = email,
+                LastName = request.LastName.Trim(),
+                Email = email.Trim(),
                 PasswordHash = _passwordProvider.CustomHashPassword(request.Password),
                 CreatedAtUtc = DateTime.UtcNow,
             };

@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.0.31903.59
+# Visual Studio Version 18
+VisualStudioVersion = 18.0.11217.181
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application", "Application\Application.csproj", "{D31A7C90-02CB-4883-BB8C-4978CC062825}"
 EndProject
@@ -12,6 +12,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "API", "API\API.csproj", "{BB6966D9-8ACE-4E7E-90DF-E134E10D402A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharedKernel", "SharedKernel\SharedKernel.csproj", "{61AA24A0-5C78-4F8F-868F-E758BF805808}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{45D685F9-2E02-4B1B-8FE2-CDAC1B278A76}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -83,8 +85,23 @@ Global
 		{61AA24A0-5C78-4F8F-868F-E758BF805808}.Release|x64.Build.0 = Release|Any CPU
 		{61AA24A0-5C78-4F8F-868F-E758BF805808}.Release|x86.ActiveCfg = Release|Any CPU
 		{61AA24A0-5C78-4F8F-868F-E758BF805808}.Release|x86.Build.0 = Release|Any CPU
+		{45D685F9-2E02-4B1B-8FE2-CDAC1B278A76}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{45D685F9-2E02-4B1B-8FE2-CDAC1B278A76}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{45D685F9-2E02-4B1B-8FE2-CDAC1B278A76}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{45D685F9-2E02-4B1B-8FE2-CDAC1B278A76}.Debug|x64.Build.0 = Debug|Any CPU
+		{45D685F9-2E02-4B1B-8FE2-CDAC1B278A76}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{45D685F9-2E02-4B1B-8FE2-CDAC1B278A76}.Debug|x86.Build.0 = Debug|Any CPU
+		{45D685F9-2E02-4B1B-8FE2-CDAC1B278A76}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{45D685F9-2E02-4B1B-8FE2-CDAC1B278A76}.Release|Any CPU.Build.0 = Release|Any CPU
+		{45D685F9-2E02-4B1B-8FE2-CDAC1B278A76}.Release|x64.ActiveCfg = Release|Any CPU
+		{45D685F9-2E02-4B1B-8FE2-CDAC1B278A76}.Release|x64.Build.0 = Release|Any CPU
+		{45D685F9-2E02-4B1B-8FE2-CDAC1B278A76}.Release|x86.ActiveCfg = Release|Any CPU
+		{45D685F9-2E02-4B1B-8FE2-CDAC1B278A76}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {56961A79-22BD-402E-B4A4-939BF1859D23}
 	EndGlobalSection
 EndGlobal
