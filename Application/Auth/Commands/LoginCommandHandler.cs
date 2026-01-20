@@ -28,7 +28,7 @@ namespace Application.Auth.Commands
                 throw new CustomValidationException("Email and password are required");
             }
 
-            var user = await _context.Users.FirstOrDefaultAsync(x => x.Email ==  request.Email);
+            var user = await _context.Users.FirstOrDefaultAsync(x => x.Email.Trim().ToLower() ==  request.Email.Trim().ToLower());
 
             if (user == null || !_passwordProvider.CustomConfirmPassword(request.Password, user.PasswordHash))
             {
