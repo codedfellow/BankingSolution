@@ -63,6 +63,10 @@ namespace Application.Account.AccountOperations
             do
             {
                 accountExists = await ConfirmAccoutNumberExists(accountNumber);
+                if(accountExists)
+                {
+                    accountNumber = HelperMethods.GenerateRandomNumericString(10);
+                }
             }
             while (accountExists);
 

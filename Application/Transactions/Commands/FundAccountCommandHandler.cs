@@ -75,6 +75,10 @@ namespace Application.Transactions.Commands
             do
             {
                 referenceExists = await ConfirmReferenceExists(referenceNumber);
+                if (referenceExists)
+                {
+                    referenceNumber = HelperMethods.GenerateRandomNumericString(15);
+                }
             }
             while (referenceExists);
 
